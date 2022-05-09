@@ -52,7 +52,9 @@ public class UserService {
 		Optional<User> user = userRepository.findByEmailId(userInfo.getEmailId());
 		if(user.isPresent() && user.get().getPassword().equals(userInfo.getPassword())) {
 			logger.info("valid User {}", this.getClass().getName());
-			return user.get();
+			User dbUser=user.get();
+			dbUser.setIsLogIn(Boolean.TRUE);
+			return userRepository.save(dbUser);
 		} else {
 			logger.error("Login Failed {} User not Found!", this.getClass().getName());
 			throw new ApplicationException("Invalid Login Credientials");
@@ -71,6 +73,7 @@ public class UserService {
 				throw new ResourceAlreadyExistsException();
 		}
 		logger.info("createUser {}", this.getClass().getName());
+		user.setIsLogIn(Boolean.FALSE);
 		return userRepository.save(user);	
 	}
 
@@ -97,4 +100,16 @@ public class UserService {
 		}
 	}
 
+	public User logoutUser(LoginDto userInfo) {
+		Optional<User> user = userRepository.findByEmailId(userInfo.getEmailId());
+		if(user.isPresent() && user.get().getPassword().equals(userInfo.getPassword())) {
+			logger.info("valid User {}", this.getClass().getName());
+			User dbUser=user.get();
+			dbUser.setIsLogIn(Boolean.FALSE);
+			return userRepository.save(dbUser);
+		} else {
+			logger.error("Logout Failed {} User not Found!", this.getClass().getName());
+			throw new ApplicationException("Invalid Logout Credientials");
+		}
+	}
 }

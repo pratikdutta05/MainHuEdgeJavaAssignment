@@ -21,6 +21,8 @@ public class User {
 	private int phoneNumber;
 	private String address;
 
+	private Boolean isLogIn;
+
 	public User( String emailId, String name, String password, int phoneNumber, String address) {
 		this.emailId = emailId;
 		this.name = name;

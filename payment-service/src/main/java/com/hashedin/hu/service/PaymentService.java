@@ -5,6 +5,7 @@ import com.hashedin.hu.dto.*;
 import com.hashedin.hu.exceptions.ApplicationException;
 import com.hashedin.hu.feign.api.CartAPI;
 import com.hashedin.hu.feign.api.ProductAPI;
+import com.hashedin.hu.feign.api.UserAPI;
 import com.hashedin.hu.model.Payment;
 import com.hashedin.hu.repository.PaymentRepository;
 import org.slf4j.Logger;
@@ -30,10 +31,20 @@ public class PaymentService {
     ProductAPI productAPI;
 
     @Autowired
+    UserAPI userAPI;
+
+    @Autowired
     PaymentRepository paymentRepository;
 
     @Transactional
     public void makePayment(Payment payment) {
+
+        User user=userAPI.getUserById(payment.getUserId()).getBody();
+
+        if(!user.getIsLogIn()){
+            logger.error("User is not logged in !");
+            throw new ApplicationException("Please Log in to continue !");
+        }
 
         if(payment.getPaymentId()!=null) {
 

@@ -44,6 +44,14 @@ public class UserController {
 		return new ResponseEntity<User>(savedUser, new HttpHeaders(), HttpStatus.OK);
 	}
 
+	@PostMapping("/logout")
+	public ResponseEntity<User> logoutUser(@RequestBody LoginDto userInfo) {
+
+		logger.info("Request to logout user...!");
+		User savedUser = userService.logoutUser(userInfo);
+		return new ResponseEntity<User>(savedUser, new HttpHeaders(), HttpStatus.OK);
+	}
+
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> retrieveAllUsers() {
 		logger.info("retrieve all users controller...!");

@@ -38,7 +38,12 @@ public class CartService {
 
         logger.debug("Checking the user is registered or not");
 
-        userAPI.getUserById(cart.getUserId());
+        User user=userAPI.getUserById(cart.getUserId()).getBody();
+
+        if(!user.getIsLogIn()){
+            logger.error("User is not logged in !");
+            throw new ApplicationException("Please Log in to continue !");
+        }
 
         Item item=productAPI.getItemById(cart.getItemId()).getBody();
 
@@ -58,6 +63,11 @@ public class CartService {
         logger.debug("Checking the user is registered or not");
 
         User user=userAPI.getUserById(userId).getBody();
+
+        if(!user.getIsLogIn()){
+            logger.error("User is not logged in !");
+            throw new ApplicationException("Please Log in to continue !");
+        }
 
         List<Cart> dbCartList=cartRepository.searchByUserID(flag,userId);
 
@@ -91,6 +101,13 @@ public class CartService {
     }
 
     public void removeItemFromCart(Integer cartId, Integer userId) {
+
+        User user=userAPI.getUserById(userId).getBody();
+
+        if(!user.getIsLogIn()){
+            logger.error("User is not logged in !");
+            throw new ApplicationException("Please Log in to continue !");
+        }
 
         if(cartRepository.existsById(cartId)){
             logger.debug("Cart Service to remove the item from cart cardId: {}",cartId);
