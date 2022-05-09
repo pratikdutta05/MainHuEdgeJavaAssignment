@@ -35,7 +35,7 @@ public class UserController {
 		return new ResponseEntity<User>(savedUser, new HttpHeaders(), HttpStatus.CREATED);
 	}
 
-	//Sign up Controller
+	//login Controller
 	@PostMapping("/login")
 	public ResponseEntity<User> logInUser(@RequestBody LoginDto userInfo) {
 

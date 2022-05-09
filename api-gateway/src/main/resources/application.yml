@@ -1,0 +1,101 @@
+server:
+   port: 8080
+
+#Service Registry
+  
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    preferIpAddress: true
+    
+#Routes    
+
+spring:
+  application:
+     name: api-gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      routes:
+      - id: userService
+        uri: lb://user-service
+        predicates:
+        - Path=/user/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: userCircuitBreaker
+            fallbackUri: forward:/fallback/user
+                
+      - id: productService
+        uri: lb://product-service
+        predicates:
+        - Path=/product/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: productCircuitBreaker
+            fallbackUri: forward:/fallback/product
+        
+      - id: cartService
+        uri: lb://cart-service
+        predicates:
+        - Path=/cart/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: cartCircuitBreaker
+            fallbackUri: forward:/fallback/cart
+            
+      - id: paymentService
+        uri: lb://payment-service
+        predicates:
+        - Path=/payment/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: paymentCircuitBreaker
+            fallbackUri: forward:/fallback/payment
+
+#Actuator
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+
+#Details for info actuator
+
+info:
+   app:
+      name: API Gateway
+      description: Gateway to access Services
+      version: 1.0.0
+      
+#Circuit Breaker
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      CircuitBreaker:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
