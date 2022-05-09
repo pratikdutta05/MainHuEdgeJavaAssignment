@@ -26,9 +26,10 @@ public class ItemController {
     ItemService itemService;
 
     @GetMapping("/all")
-    public List<Item> getAllItem(){
+    public List<Item> getAllItem(@RequestParam String shortParam, @RequestParam String filterParam,
+                                 @RequestParam Double filterValue){
         logger.info("Request to show all Item");
-        return itemService.findAll();
+        return itemService.findAll(shortParam, filterParam, filterValue);
     }
 
     @PutMapping("/reduce")

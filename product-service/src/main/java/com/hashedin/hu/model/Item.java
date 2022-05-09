@@ -21,14 +21,17 @@ public class Item {
 
     private Double price;
 
+    private Double rating;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="categoryId", referencedColumnName = "categoryId")
     private Category category;
 
-    public Item(String itemName, Integer quantity, Double price, Category category) {
+    public Item(String itemName, Integer quantity, Double price,Double rating, Category category) {
         this.itemName = itemName;
         this.quantity = quantity;
         this.price = price;
+        this.rating=rating;
         this.category = category;
     }
 }

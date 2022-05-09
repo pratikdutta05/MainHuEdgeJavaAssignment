@@ -31,9 +31,9 @@ public class LoadDemoDataService {
         categoryRepository.saveAll(data);
 
         List<Item> loadItem=new ArrayList<>();
-        loadItem.add(new Item("samsung",100,10000.0,categoryRepository.getById(1)));
-        loadItem.add(new Item("apple",10,50000.0,categoryRepository.getById(1)));
-        loadItem.add(new Item("dell",50,40000.0,categoryRepository.getById(2)));
+        loadItem.add(new Item("samsung",100,10000.0,4.1,categoryRepository.getById(1)));
+        loadItem.add(new Item("apple",10,50000.0,4.9,categoryRepository.getById(1)));
+        loadItem.add(new Item("dell",50,40000.0,3.9,categoryRepository.getById(2)));
 
         itemRepository.saveAll(loadItem);
     }
