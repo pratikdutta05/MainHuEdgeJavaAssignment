@@ -121,8 +121,7 @@ class UserServiceApplicationTests {
 				.andExpect(status().is4xxClientError());
 
 	}
-
-
+	
 	@Test
 	void testfindByIdSuccess() throws Exception {
 
